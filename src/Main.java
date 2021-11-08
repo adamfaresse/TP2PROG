@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         long startTime = System.currentTimeMillis();
         Dico dico = new Dico("/amuhome/f18010428/Bureau/S4/Algo2/TP/TPAlgo2/dico.txt");
-        Trigramme trigramme = new Trigramme("<algorithmique>");
+        Trigramme trigramme = new Trigramme("logarytmique");
         //System.out.println(dico.dico);
         Algo algo = new Algo("logarytmique","algorithmique");
         System.out.println(algo.calculate());
