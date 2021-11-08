@@ -14,96 +14,54 @@ public class Trigramme {
         this.GrandM = mot;
     }
 
-    public List<String> ListeL(HashMap<String,ArrayList<String>> dicoTrigramme,Dico dico){
-        List<String >L = new ArrayList<>();
+    public HashMap<String,ArrayList<String>> ListeL(HashMap<String,ArrayList<String>> dicoTrigramme){
+        HashMap<String,ArrayList<String> >L = new HashMap<>();
         for (String tri : this.trigramme){
-            for (String mot : dico.dico ){
-
-                if (dicoTrigramme.get(mot).contains(tri)){
-                    L.add(mot);
-                }
+            if(dicoTrigramme.containsKey(tri)){
+                L.put(tri,dicoTrigramme.get(tri));
             }
+
         }
         return L;
     }
 
-    public HashMap<String, Integer>  OccurenceDansL(List<String> liste){
+    public HashMap<String, Integer>  OccurenceDansL(HashMap<String,ArrayList<String>> liste){
         HashMap<String,Integer> ListeLEtOcc = new HashMap<>();
-        for(String mot : liste){
-            int conteur = 0;
-            if(!ListeLEtOcc.containsKey(mot)){
-                this.ListTrie.add(mot);
-                conteur = Collections.frequency(liste,mot);
-                ListeLEtOcc.put(mot,conteur);
-            }
-
-        }
-        /*for (String mot1 : liste){
-            int conteur = 0;
-            if(!ListeLEtOcc.containsKey(mot1)){
-                for (String mot2 : liste){
-                    if(mot1.equals(mot2)){
-                        conteur++;
-                    }
+        for(String tri : liste.keySet()){
+            for(String mot : liste.get(tri)){
+                if(!ListeLEtOcc.containsKey(mot)){
+                    ListeLEtOcc.put(mot,1);
+                }else{
+                    int i = ListeLEtOcc.get(mot)+1;
+                    ListeLEtOcc.put(mot,i);
                 }
-                ListeLEtOcc.put(mot1,conteur);
             }
-        }*/
+        }
         return ListeLEtOcc;
     }
-
-
-    /*public List<String> ListeTriage(List<String>listeNonTrie){
-        List<String > listeTrie = new ArrayList<>();
-        for (String mot: listeNonTrie){
-            if(!listeTrie.contains(mot)){
-                listeTrie.add(mot);
-            }
-        }
-        return listeTrie;
-    }*/
-    public List<String> ListeOccuMax(HashMap<String,Integer> listeMap){
+    public List<String> ListeOccuMax(HashMap<String,Integer> listeMap,HashMap<String,ArrayList<String>> liste){
         LinkedList<String> listeMax = new LinkedList<>();
-        int valeur= 1;
-        boolean bool = false;
-        while(!bool){
-            bool = true;
-            for (String mot : this.ListTrie){
-                listeMap.get(mot);
-                if (valeur==listeMap.get(mot)){
-                    if(listeMax.size()==100){
-                        listeMax.removeFirst();
-                    }
-                    listeMax.add(mot);
-                    bool = false;
-                }
-            }
-            valeur++;
+        List<String> centPremier = new ArrayList<String>();
+        int valeur= liste.keySet().size()-1;
+        while(valeur>=1){
+            if(listeMax.size()<100){
 
+                for (String mot : listeMap.keySet()){
+                    if(listeMap.get(mot)==valeur){
+                        listeMax.add(mot);
+                    }
+                }valeur--;
+            }
+            else{
+                for (int i = 0; i <100 ; i++) {
+                    centPremier.add(listeMax.get(i));
+
+                }break;
+            }
         }
-        return listeMax;
+        return centPremier;
     }
-    /*public List<String> ListeOccuMax(HashMap<String,Integer> listeMap,List<String> ListTrie){
-        LinkedList<String> listeMax = new LinkedList<>();
-        int valeur= 1;
-        boolean bool = false;
-        while(!bool){
-            bool = true;
-            for (String mot : ListTrie){
-                listeMap.get(mot);
-                if (valeur==listeMap.get(mot)){
-                    if(listeMax.size()==100){
-                        listeMax.removeFirst();
-                    }
-                    listeMax.add(mot);
-                    bool = false;
-                }
-            }
-            valeur++;
 
-        }
-        return listeMax;
-    }*/
 
     public HashMap<Integer,ArrayList<String>> DistanceList(List<String> listeMax) {
         HashMap<Integer, ArrayList<String>> ListeMotEtDistance = new HashMap<>();
@@ -124,20 +82,20 @@ public class Trigramme {
     public List<String> ListeDesCinq(HashMap<Integer,ArrayList<String>> ListeMotEtDistance){
         List<String> cinqMots = new ArrayList<>();
         int i = 1;
-        while(cinqMots.size()<5){
+        while(cinqMots.size()<5 && i<10){
             if(ListeMotEtDistance.containsKey(i)){
                 for(String mot : ListeMotEtDistance.get(i)){
-                    if(cinqMots.size()>5){
-                        break;
+                    if(cinqMots.size()<5){
+                        cinqMots.add(mot);
                     }
-                    cinqMots.add(mot);
-
                 }
             }
             i++;
         }
         return cinqMots;
     }
+
+
 
 
 }
