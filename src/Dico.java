@@ -15,6 +15,15 @@ public class Dico {
         }
     }
 
+    public HashMap<String,ArrayList<String>> Trigramme(){
+        HashMap<String,ArrayList<String>> TrigrammeDico = new HashMap<>();
+        for(String mot : this.dico){
+            TrigrammeDico.put(mot,new Trigramme(mot).trigramme);
+        }
+        return TrigrammeDico;
+
+    }
+
     /*public List<String> list(Trigramme trigramme){
         List<String> list= new ArrayList<String>();
         for (String dic : dico){

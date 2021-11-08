@@ -3,21 +3,23 @@ package src;
 import java.util.*;
 
 public class Trigramme {
-    public List<String>  trigramme = new ArrayList<String>();
+    public ArrayList<String>  trigramme = new ArrayList<String>();
     public String GrandM ;
     public List<String> ListTrie = new ArrayList<>();
     public Trigramme(String mot){
         for (int i = 0; i <mot.length()-2 ; i++) {
                 this.trigramme.add(mot.charAt(i) + Character.toString(mot.charAt(i + 1)) + mot.charAt(i + 2));
+
         }
         this.GrandM = mot;
     }
 
-    public List<String> ListeL(Dico dico){
+    public List<String> ListeL(HashMap<String,ArrayList<String>> dicoTrigramme,Dico dico){
         List<String >L = new ArrayList<>();
         for (String tri : this.trigramme){
             for (String mot : dico.dico ){
-                if (mot.contains(tri)){
+
+                if (dicoTrigramme.get(mot).contains(tri)){
                     L.add(mot);
                 }
             }
@@ -103,24 +105,39 @@ public class Trigramme {
         return listeMax;
     }*/
 
-    public List<String> DistanceList(List<String> listeMax){
-        LinkedList<String> ListeMeilleurMot = new LinkedList<>();
-        for(String mot :listeMax){
-            int conteur = 0;
+    public HashMap<Integer,ArrayList<String>> DistanceList(List<String> listeMax) {
+        HashMap<Integer, ArrayList<String>> ListeMotEtDistance = new HashMap<>();
+        for (String mot : listeMax) {
             Algo algo = new Algo(mot,this.GrandM);
-            int x = algo.calculate();
-            for(String mot1 : listeMax){
-                Algo algo2 = new Algo(mot1,this.GrandM);
-                int y = algo2.calculate();
-                if (x <= y) {
-                    conteur++;
+            if(!ListeMotEtDistance.containsKey(algo.calculate())){
+                ArrayList<String> listTemporaire = new ArrayList<>();
+                listTemporaire.add(mot);
+                ListeMotEtDistance.put(algo.calculate(), listTemporaire);
+            }
+            if(!ListeMotEtDistance.get(algo.calculate()).contains(mot)){
+                ListeMotEtDistance.get(algo.calculate()).add(mot);
+            }
+
+        }
+        return ListeMotEtDistance;
+    }
+    public List<String> ListeDesCinq(HashMap<Integer,ArrayList<String>> ListeMotEtDistance){
+        List<String> cinqMots = new ArrayList<>();
+        int i = 1;
+        while(cinqMots.size()<5){
+            if(ListeMotEtDistance.containsKey(i)){
+                for(String mot : ListeMotEtDistance.get(i)){
+                    if(cinqMots.size()>5){
+                        break;
+                    }
+                    cinqMots.add(mot);
+
                 }
             }
-            if (conteur<5){
-                ListeMeilleurMot.add(mot);
-            }
+            i++;
         }
-        return ListeMeilleurMot;
+        return cinqMots;
     }
+
 
 }
